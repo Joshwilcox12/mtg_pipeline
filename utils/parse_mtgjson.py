@@ -4,14 +4,16 @@ import pandas as pd
 
 
 
-with open("data/AtomicCards.json", "r", encoding="utf-8") as f:
+with open("data/AllPrintings.json", "r", encoding="utf-8") as f:
 
 
     data = json.load(f)
-    meta = data["meta"]
-    cards = data["data"]
-    card_data = cards.get('"Brims" Barone, Midway Mobster')
-    first_five =  list(cards.keys())[:5]
+    sets = data["data"]["10E"]
 
-print(card_data[0].keys())
+    
 
+
+    # for card in data["data"]["10E"]["cards"]:
+    #     print(card["name"])
+    #     print("---")
+    print(cards)
