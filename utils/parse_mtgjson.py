@@ -10,7 +10,7 @@ with open("data/AllPrintings.json", "r", encoding="utf-8") as f:
     data = json.load(f)
 #list of keys(columns) I want and think are important for this project
     keys = ["setCode", "uuid", "name", "borderColor", "colors", "convertedManaCost", "edhrecRank", "edhrecSaltiness",
-            "faceFlavorName","faceManaValue", "finishes", "frameEffects", "isAlternative", "isFullArt"
+            "faceFlavorName","faceManaValue", "finishes", "frameEffects", "isAlternative", "isFullArt",
             "isOnlineOnly", "isReprint", "isReserved", "keywords", "life", "manaCost", "manaValue",
             "number", "originalPrintings", "originalReleaseDate", "otherFaceIds", "power", "toughness",
             "printings", "purchaseUrls", "rarity", "side", "sourceProducts", "subsets", "supertypes", "text",
@@ -29,29 +29,19 @@ with open("data/AllPrintings.json", "r", encoding="utf-8") as f:
         cards = sets_info.get("cards", [])
         #cards is a list of dictionary info of each card, for each card in this list store the key value pair into card_info, and we loop through only the keys we want
         for card in cards:
-           card_info = {k: card.get(k) for k in keys}
+           card_info = {k: card.get(k, None) for k in keys}
            final_list.append(card_info)
 
 df = pd.DataFrame(final_list)
 
+df.to_csv("output/test_mtg.csv",  index=False, encoding="utf-8-sig")
 
 print(f"total cards processed: {len(df)}")
 
 
 
-    # sets = data["data"]
-    # keys =["name", "colors", "power", "toughness"]
-    # for set_code, set_info in sets.items():
-    #    for card in set_info.get("cards",[]):
-    #        values = [set_code + card.get(k) for k in keys]
-    #        print(values)
 
-  
 
     
 
 
-    # for card in data["data"]["10E"]["cards"]:
-    #     print(card["name"])
-    #     print("---")
-  
