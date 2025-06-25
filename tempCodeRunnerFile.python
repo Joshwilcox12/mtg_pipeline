@@ -1,0 +1,16 @@
+from typing import Dict
+
+def count_characters(word: str):
+   count = {}
+   for char in word:
+        if char not in count:
+            count[char] = 0
+        count[char] += 1  
+   return count
+
+
+
+print(count_characters('hello'))
+print(count_characters('world'))
+print(count_characters('hello world'))
+print(count_characters('this is a longer setence'))
