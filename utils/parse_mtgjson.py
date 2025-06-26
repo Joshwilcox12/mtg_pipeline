@@ -5,7 +5,7 @@ import pandas as pd
 
  #list of keys(columns) I want and think are important for this project
  #  
-keys = ["setCode", "uuid", "name", "borderColor", "colors", "convertedManaCost", "edhrecRank", "edhrecSaltiness",
+keys = ["setCode", "uuid", "Identifiers", "name", "borderColor", "colors", "convertedManaCost", "edhrecRank", "edhrecSaltiness",
                 "faceFlavorName","faceManaValue", "finishes", "frameEffects", "isAlternative", "isFullArt",
                 "isOnlineOnly", "isReprint", "isReserved", "keywords", "life", "manaCost", "manaValue",
                 "number", "originalPrintings", "originalReleaseDate", "otherFaceIds", "power", "toughness",
@@ -34,8 +34,11 @@ def necessaryValue(json):
            if isinstance(card_url, dict):
                for site, url in card_url.items():
                    card_info[site] = url
-               
+           scryfall_id = card.get("identifiers", {}).get("scryfallId")
+           if scryfall_id:
+                card_info["scryfallId"] = scryfall_id    
            card_info.pop("purchaseUrls", None)   
+           card_info.pop("Identifiers",None)
               
            final_list.append(card_info)
     # final_list.pop('purchaseUrls')
