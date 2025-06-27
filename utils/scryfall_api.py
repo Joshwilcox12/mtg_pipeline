@@ -1,32 +1,41 @@
 import requests
 import pandas as pd
 import os
+import json
 
 def grab_api():
     url = 'https://api.scryfall.com/bulk-data'
-    output_path = "data/scryfall.json"
+    
     
     headers = {
         "User-Agent": "mtg-project/1.0 (joshuawilcox63@gmail.com)"
     }
 
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
-        data = response.json()
-        oracle_bulk = data["data"][0]
-        name= oracle_bulk["name"]
-        updateTime = oracle_bulk["updated_at"]
-        downloadUrl = oracle_bulk["download_uri"]
-        print(oracle_bulk["download_uri"])
-        print(oracle_bulk["size"])
-        downloadResponse = requests.get(downloadUrl)
+    response = requests.get(url, headers=headers, timeout=20)
     
-        with open(output_path, "wb") as f:
-            print(f"downloading {name}, the update time is: {updateTime}")
-            f.write(downloadResponse.content)
- 
+    keys = ["id", "prices", "image_uris"]
+    
+    if response.status_code == 200:
+        data = response.json()["data"]
+        for entry in data:
+            if entry["name"] == "Default Cards":
+                 # default-cards
+                downloadUrl = entry["download_uri"]
+                file_size = entry["size"]
+                print(entry["name"])
+                print(downloadUrl)
+                print(file_size)
 
+        downloadResponse = requests.get(downloadUrl, timeout=60)
+        info = downloadResponse.json()
+
+        
+
+        # Extract required keys from each card
+        final_list = [{k: card.get(k, None) for k in keys} for card in info]
+        df = pd.json_normalize(final_list)  # Flatten nested keys
+          # Avoid printing huge DataFrame
+        df.to_csv("output/image_prices.csv",  index=False, encoding="utf-8-sig")
     else:
         print(f"Request failed with status code {response.status_code}")
 
