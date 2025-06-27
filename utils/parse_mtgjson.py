@@ -17,32 +17,37 @@ def openJson():
            data = json.load(f)
     return data
 
+
+def extract_card_info(card: dict, keys: list) -> dict:
+    card_info = {k: card.get(k, None) for k in keys}
+    card_url = card_info.get('purchaseUrls',{})
+    if isinstance(card_url, dict):
+        for site, url in card_url.items():
+            card_info[site] = url
+            scryfall_id = card.get("identifiers", {}).get("scryfallId")
+            if scryfall_id:
+                card_info["scryfallId"] = scryfall_id    
+        card_info.pop("purchaseUrls", None)   
+        card_info.pop("Identifiers",None)
+    return card_info
+              
+        
      
 
 def necessaryValue(json):
     final_list = []
-#append that dic to the list
+
     set_data = json["data"]
-    #key 10E, value.....
-    # for each sets information, store the info of the key: cards and it's values(card data in a dic) in cards
+    
     for sets_id, sets_info in set_data.items():
         cards = sets_info.get("cards", [])
-        #cards is a list of dictionary info of each card, for each card in this list store the key value pair into card_info, and we loop through only the keys we want
+        
         for card in cards:
-           card_info = {k: card.get(k, None) for k in keys}
-           card_url = card_info.get('purchaseUrls',{})
-           if isinstance(card_url, dict):
-               for site, url in card_url.items():
-                   card_info[site] = url
-           scryfall_id = card.get("identifiers", {}).get("scryfallId")
-           if scryfall_id:
-                card_info["scryfallId"] = scryfall_id    
-           card_info.pop("purchaseUrls", None)   
-           card_info.pop("Identifiers",None)
-              
+           card_info = extract_card_info(card, keys)
            final_list.append(card_info)
-    # final_list.pop('purchaseUrls')
+   
     return final_list
+ 
     
 def save_to_csv(ls):
     df = pd.DataFrame(ls)
