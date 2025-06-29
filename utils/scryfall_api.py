@@ -3,6 +3,13 @@ import pandas as pd
 import os
 import json
 
+
+
+
+keys = ["id", "prices", "image_uris"]
+price_keys = ["usd", "usd_foil","eur", "eur_foil"]
+image_keys = ["large"]
+
 def grab_api():
     url = 'https://api.scryfall.com/bulk-data'
     
@@ -12,9 +19,14 @@ def grab_api():
     }
 
     response = requests.get(url, headers=headers, timeout=20)
+
+    return response
     
-    keys = ["id", "prices", "image_uris"]
+   
     
+    
+def get_download_url_default(response):
+
     if response.status_code == 200:
         data = response.json()["data"]
         for entry in data:
@@ -28,15 +40,69 @@ def grab_api():
 
         downloadResponse = requests.get(downloadUrl, timeout=60)
         info = downloadResponse.json()
-
-        
-
-        # Extract required keys from each card
-        final_list = [{k: card.get(k, None) for k in keys} for card in info]
-        df = pd.json_normalize(final_list)  # Flatten nested keys
-          # Avoid printing huge DataFrame
-        df.to_csv("output/image_prices.csv",  index=False, encoding="utf-8-sig")
+        return info
     else:
         print(f"Request failed with status code {response.status_code}")
 
-grab_api()
+
+def clean_data(data):
+        final_list = []
+        for card in data:
+             base_data = {k: card.get(k, None) for k in keys}
+
+             prices = card.get("prices", {})
+             selected_prices = {k: prices.get(k)for k in price_keys}
+
+             base_data.update(selected_prices)
+
+             images = card.get("image_uris",{})
+             selected_images = {k: images.get(k) for k in image_keys}
+
+             base_data.update(selected_images)
+
+             final_list.append(base_data)
+
+        return final_list
+
+def price_only(catalog):
+     
+     for card in catalog:
+          card.pop("image_uris", None)
+          card.pop("prices", None)
+          card.pop("large", None)
+     df = pd.DataFrame(catalog) 
+     return df
+
+
+def image_only(catalog):
+     
+     for card in catalog:
+          card.pop("image_uris", None)
+          card.pop("prices", None)
+          for k in price_keys:
+               card.pop(k, None)
+
+     df = pd.DataFrame(catalog) 
+     return df
+     
+def submit_image():
+     url = grab_api()
+     default = get_download_url_default(url)
+     clean = clean_data(default)
+     finish = image_only(clean)
+     print(finish.head(5))
+     return finish
+
+
+
+def main():
+     url = grab_api()
+     default = get_download_url_default(url)
+     clean = clean_data(default)
+     finish = price_only(clean)
+     return finish
+
+if __name__ == "__main__":
+    main()
+
+submit_image()

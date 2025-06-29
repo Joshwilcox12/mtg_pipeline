@@ -46,21 +46,20 @@ def necessaryValue(json):
            card_info = extract_card_info(card, keys)
            final_list.append(card_info)
    
-    return final_list
- 
-    
-def save_to_csv(ls):
-    df = pd.DataFrame(ls)
+    return final_list   
 
-    df.to_csv("output/test_mtg.csv",  index=False, encoding="utf-8-sig")
-
-    print(f"total cards processed: {len(df)}")
+def get_card_data():
+    data = openJson()
+    mainValue = necessaryValue(data)
+    df = pd.DataFrame(mainValue)
+    return df
 
 
 def main():
-    data = openJson()
-    mainValue = necessaryValue(data)
-    save_to_csv(mainValue)
+    df = get_card_data()
+    df.to_csv("output/card_catalog.csv",  index=False, encoding="utf-8-sig")
+
+    print(f"total cards processed: {len(df)}")
 
 if __name__ == "__main__":
     main()

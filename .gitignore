@@ -1,4 +1,6 @@
 /data/*.json
 /auth/*.json
+__pycache__/
+*.pyc
 /output/
 /venv/
