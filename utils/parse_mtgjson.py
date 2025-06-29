@@ -24,9 +24,9 @@ def extract_card_info(card: dict, keys: list) -> dict:
     if isinstance(card_url, dict):
         for site, url in card_url.items():
             card_info[site] = url
-            scryfall_id = card.get("identifiers", {}).get("scryfallId")
-            if scryfall_id:
-                card_info["scryfallId"] = scryfall_id    
+        scryfall_id = card.get("identifiers", {}).get("scryfallId")
+        if scryfall_id:
+            card_info["scryfallId"] = scryfall_id    
         card_info.pop("purchaseUrls", None)   
         card_info.pop("Identifiers",None)
     return card_info

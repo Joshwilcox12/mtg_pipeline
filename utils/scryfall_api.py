@@ -90,7 +90,6 @@ def submit_image():
      default = get_download_url_default(url)
      clean = clean_data(default)
      finish = image_only(clean)
-     print(finish.head(5))
      return finish
 
 
@@ -100,6 +99,7 @@ def main():
      default = get_download_url_default(url)
      clean = clean_data(default)
      finish = price_only(clean)
+     finish.to_csv("output/price.csv", index=False, encoding="utf-8-sig")
      return finish
 
 if __name__ == "__main__":

@@ -13,9 +13,9 @@ def join_images():
 
     image_df.rename(columns={"id": "scryfallId"}, inplace=True)
 
-    image_df = image_df[["scryfallId", "image_uris.large"]]
+    image_df = image_df[["scryfallId", "large"]]
 
-    image_df.rename(columns={"image_uris.large": "image_url"}, inplace=True)
+    image_df.rename(columns={"large": "image_url"}, inplace=True)
 
     merged_df = cards_df.merge(image_df, on="scryfallId", how="left")
 
