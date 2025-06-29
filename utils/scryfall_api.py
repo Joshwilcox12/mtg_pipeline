@@ -93,6 +93,11 @@ def submit_image():
      return finish
 
 
+def raw():
+    url = grab_api()
+    default = get_download_url_default(url) 
+    return default
+
 
 def main():
      url = grab_api()
