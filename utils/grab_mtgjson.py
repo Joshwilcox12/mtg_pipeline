@@ -32,6 +32,9 @@ def getUrl():
             f.write(new_data)
         print("File does not exist, download and create")
 
+    return response.content
+    
+
 def main():
     getUrl()
 
