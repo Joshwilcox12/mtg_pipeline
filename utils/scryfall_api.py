@@ -93,10 +93,10 @@ def submit_image():
      return finish
 
 
-def raw():
+def raw_scryfall():
     url = grab_api()
     default = get_download_url_default(url) 
-    return default
+    print(default)
 
 
 def main():
@@ -107,7 +107,5 @@ def main():
      finish.to_csv("output/price.csv", index=False, encoding="utf-8-sig")
      return finish
 
-if __name__ == "__main__":
-    main()
 
-submit_image()
+raw_scryfall()
