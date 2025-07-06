@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 import os
 import json
+from io import StringIO
 
 
 
@@ -95,13 +96,14 @@ def raw_scryfall():
     return default
 
 
-def main():
+def daily_price():
      url = grab_api()
      default = get_download_url_default(url)
      clean = clean_data(default)
      finish = price_only(clean)
      finish.to_csv("output/price.csv", index=False, encoding="utf-8-sig")
-     return finish
+     buffer = StringIO()
+     finish.to_csv(buffer, index=False, encoding="utf-0-sig")
+     return buffer.getvalue()
+     
 
-
-raw_scryfall()
