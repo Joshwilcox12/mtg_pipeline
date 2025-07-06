@@ -103,7 +103,7 @@ def daily_price():
      finish = price_only(clean)
      finish.to_csv("output/price.csv", index=False, encoding="utf-8-sig")
      buffer = StringIO()
-     finish.to_csv(buffer, index=False, encoding="utf-0-sig")
+     finish.to_csv(buffer, index=False, encoding="utf-8-sig")
      return buffer.getvalue()
      
 

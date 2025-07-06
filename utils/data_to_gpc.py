@@ -45,9 +45,9 @@ def upload_clean_daily_price_from_memory(bucket_name, contents, destination_blob
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
-    blob.upload_from_memory(contents, "text/csv")
+    blob.upload_from_string(contents, "text/csv")
 
-    
+    print(f"Uploaded {destination_blob_name} to bucket {bucket_name} successfully.")
 
 
 def upload_clean_mtgJson_catalog_from_memory(bucket_name, contents, destination_blob_name):
