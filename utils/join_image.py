@@ -18,11 +18,11 @@ def join_images():
     image_df.rename(columns={"large": "image_url"}, inplace=True)
 
     merged_df = cards_df.merge(image_df, on="scryfallId", how="left")
+    final_df = merged_df
 
-
-    print(merged_df.head(5))
+    
     merged_df.to_csv("output/combined.csv",  index=False, encoding="utf-8-sig")
+    return final_df
 
 
 
-join_images()

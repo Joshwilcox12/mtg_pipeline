@@ -33,11 +33,7 @@ def get_download_url_default(response):
             if entry["name"] == "Default Cards":
                  # default-cards
                 downloadUrl = entry["download_uri"]
-                file_size = entry["size"]
-                print(entry["name"])
-                print(downloadUrl)
-                print(file_size)
-
+               
         downloadResponse = requests.get(downloadUrl, timeout=60)
         info = downloadResponse.json()
         return info
@@ -96,7 +92,7 @@ def submit_image():
 def raw_scryfall():
     url = grab_api()
     default = get_download_url_default(url) 
-    print(default)
+    return default
 
 
 def main():
